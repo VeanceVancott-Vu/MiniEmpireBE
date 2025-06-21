@@ -8,6 +8,7 @@ public class MiniEmpiresBeApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(MiniEmpiresBeApplication.class, args);
+
     }
 
 }
