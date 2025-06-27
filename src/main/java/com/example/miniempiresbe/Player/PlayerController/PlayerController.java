@@ -10,19 +10,27 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/players")
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class PlayerController {
 
     private final PlayerService playerService;
 
+    public PlayerController(PlayerService playerService) {
+        this.playerService = playerService;
+    }
+
 
     // 1) Create a new player
-    @PostMapping
+    @PostMapping(
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<Void> AddNewPlayer(@RequestBody Player player)
     {
         boolean ok = playerService.AddNewPlayer(player);
@@ -69,6 +77,14 @@ public class PlayerController {
         Player updated = playerService.UpdatePlayer(id, req);
         return updated != null
                 ? ResponseEntity.ok(updated)
+                : ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePlayer(@PathVariable Long id) {
+        boolean deleted = playerService.deleteById(id);
+        return deleted
+                ? ResponseEntity.noContent().build()
                 : ResponseEntity.notFound().build();
     }
 

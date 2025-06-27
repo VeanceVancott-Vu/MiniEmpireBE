@@ -1,7 +1,9 @@
 package com.example.miniempiresbe.Player.PlayerModel;
 
 import jakarta.persistence.*;
-import org.hibernate.mapping.List;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "PLayer")
@@ -24,8 +26,10 @@ public class Player {
     @Column(name = "XP")
     private Integer experiencePoints;
 
-    private List matchHistory;
-
+    @ElementCollection
+    @CollectionTable(name = "player_match_history", joinColumns = @JoinColumn(name = "player_id"))
+    @Column(name = "match_id") // or whatever the string represents
+    private List<String> matchHistory = new ArrayList<>();
     private String achievement;
 
     @Override

@@ -89,6 +89,15 @@ public class PlayerService {
         }
     }
 
+    public boolean deleteById(Long id) {
+        if (!repo.existsById(id)) {
+            return false;
+        }
+        repo.deleteById(id);
+        return true;
+    }
+
+
 
 
 
