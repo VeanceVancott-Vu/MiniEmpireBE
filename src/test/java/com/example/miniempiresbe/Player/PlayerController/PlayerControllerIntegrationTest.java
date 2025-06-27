@@ -36,6 +36,8 @@ class PlayerControllerIntegrationTest {
     @Autowired
     private PlayerRepository repo;
 
+
+
     @BeforeEach
     void cleanup() {
         repo.deleteAll();
@@ -84,6 +86,8 @@ class PlayerControllerIntegrationTest {
     }
 
 
+
+
     @Test
     void updatePlayer_shouldReturnUpdatedFields() throws Exception {
         // Seed a player first
@@ -96,6 +100,9 @@ class PlayerControllerIntegrationTest {
                         .content(mapper.writeValueAsString(original)))
                 .andExpect(status().isCreated());
 
+        Long id = repo.findAll().get(0).getId();
+
+
         // Prepare an update payload
         String updatedJson = """
         {
@@ -105,7 +112,7 @@ class PlayerControllerIntegrationTest {
         """;
 
         // Perform PUT
-        mockMvc.perform(put("/api/players/1")
+        mockMvc.perform(put("/api/players/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(updatedJson))
@@ -125,13 +132,17 @@ class PlayerControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(p)))
                 .andExpect(status().isCreated());
+        Long id = repo.findAll().get(0).getId();
 
         // Step 2: Delete the player
-        mockMvc.perform(delete("/api/players/1"))
+        mockMvc.perform(delete("/api/players/{id}",id))
                 .andExpect(status().isNoContent());
 
         // Step 3: Confirm it's gone
         mockMvc.perform(get("/api/players/1"))
                 .andExpect(status().isNotFound());
     }
+
+
+
 }
